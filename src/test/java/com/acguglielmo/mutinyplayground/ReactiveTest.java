@@ -3,7 +3,6 @@ package com.acguglielmo.mutinyplayground;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,14 +26,12 @@ public class ReactiveTest {
     public void multiTest() {
 
         Multi.createFrom()
-            .items("Antonio", "Guglielmo", "Test")
-            .onItem()
-            .apply(n -> String.format("hello %s", n))
+            .items("Antonio", "Carlos", "Guglielmo", "Neto")
+            .onItem().apply( n -> format("my friend %s", n) ).cache()
+            .onItem().apply( n -> format("Hello %s", n) )
+            .onCompletion().continueWith("All of you are Welcome!")
             .subscribe()
-            .with(
-            		e -> assertThat(e, equalTo( "hello Antonio" ) ),
-                    failure -> fail(failure)
-            );
+            .with( System.out::println );
 
 
     }
